@@ -168,9 +168,11 @@ def verifyemail():
                 conn.commit()
             except Exception as e:
                 return f"An error occurred: {e}"
+                
+            else:
+                return render_template("home.html")
             finally:
                 conn.close()
-            return render_template("home.html")
         else:
             return "<h3 style='color: red;'>Incorrect OTP. Please try again.</h3>"
     else:
@@ -313,7 +315,7 @@ def cartpage():
         })
     except Exception as e:
         app.logger.error(f"Error occurred: {e}")
-        return "Some Random Errors Occurred", 500
+        return "CART IS EMPTY", 500
     finally:
         cursor.close()
         conn.close()
