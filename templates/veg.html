@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vegetarian Menu</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/veg.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="navbar">
+                <li><a href="/menu">Menu</a></li>
+                <li><a href="/order">Orders</a></li>
+                <li><a href="/aboutus">About Us</a></li>
+                <li><a href="/contactus">Contact Us</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div>
+            <h1>WELCOME   {{ name }}</h1>
+        </div>
+        <h1 class="title">Vegetarian Menu</h1>
+
+        <!-- Link to Non-Vegetarian Menu on the right -->
+        <div class="menu-link-container">
+            <a href="/nonveg?username={{ name }}" class="menu-link">Non-Vegetarian Menu</a>
+        </div>
+
+        <!-- Vegetarian Menu Items -->
+        <div class="menu-items">
+            {% for item in items %}
+            <div class="item">
+                <img src="{{ item.image_url }}" alt="{{ item.name }}">
+                <h3>{{ item.name }}</h3>
+                <p>{{ item.price }}/-</p>
+                <form action="/add_to_cart?username={{ name }}" method="post">
+                    <div class="quantity-container">
+                        <input type="hidden" name="fooditem" value="{{ item.name }}">
+                        <input type="hidden" name="price" value="{{ item.price }}">
+                        
+                        <label for="quantity-{{ loop.index }}">Quantity:</label>
+                        <input type="number" id="quantity-{{ loop.index }}" name="quantity" min="1" max="10" value="1" class="quantity-input">
+                    </div>
+                    <button type="submit" class="add-to-cart">Add to Cart</button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Our Restaurant. All rights reserved.</p>
+    </footer>
+</body>
+</html>

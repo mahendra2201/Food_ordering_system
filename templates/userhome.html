@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Ordering System - Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/userhome.css') }}">
+</head>
+<body>
+    <header>
+        <h1>WELCOME {{ name }}</h1>
+        <nav>
+            <ul>
+                <li><a href="/menu?username={{ name }}">Menu</a></li>
+                <li><a href="/orders">Orders</a></li>
+                <li><a href="/FAQS">FAQs</a></li>
+                <li><a href="/policies">Our Policies</a></li>
+                <li><a href="/aboutus">About Us</a></li>
+                <li><a href="/contactus">Contact Us</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="hero">
+            <input type="hidden" name="username" value="{{ name }}">
+            <h1>Welcome to Foodie's Delight</h1>
+            <p>Your favorite meals delivered fast and fresh.</p>
+        </section>
+    </main>
+</body>
+</html>

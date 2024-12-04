@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Saha Foods</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/login.css')}}">
+</head>
+<body>
+    <!-- Main Heading -->
+    <header>
+        <h1 class="main-heading">Welcome to Saha Foods</h1>
+        <!-- Navigation Links -->
+        <div class="navbar">
+            <a href="/aboutus">About Us</a>
+            <a href="/contactus">Contact Us</a>
+            <a href="/policies">Our Policies</a>
+            <a href="/FAQS">FAQs</a>
+            <a href="/home">Home</a>
+        </div>
+    </header>
+
+    <!-- Login Section -->
+    <div class="container">
+        <div class="block login creative-card">
+            <h2>Login</h2>
+            <form action="/logindata" method="POST">
+                <label for="login-username">Username</label>
+                <input type="text" id="login-username" name="username" placeholder="Enter username" required>
+                <label for="login-password">Password</label>
+                <input type="password" id="login-password" name="password" placeholder="Enter password" required>
+                <button type="submit">Login</button>
+            </form>
+            <p>New user? <a href="/register">Please register here</a>.</p>
+        </div>
+    </div>
+</body>
+</html>

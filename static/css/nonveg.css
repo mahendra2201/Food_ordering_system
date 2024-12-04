@@ -1,0 +1,131 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fdf2f2; /* Soft light red background */
+    color: #333; /* Default text color */
+}
+
+/* Welcome Section */
+main h1 {
+    text-align: center;
+    color: #d9534f; /* Bold red color for welcome and title */
+    font-size: 2.5rem;
+    margin: 20px 0;
+}
+
+main h1.title {
+    font-size: 2rem;
+    margin-top: 10px;
+}
+
+/* Special styling for the welcome message */
+main div h1 {
+    background-color: #f8d7da; /* Light red background */
+    color: #721c24; /* Darker red text */
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin: 0 auto;
+    display: inline-block;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Menu Link Container */
+.menu-link-container {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.menu-link {
+    text-decoration: none;
+    color: #d9534f;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: 2px solid #d9534f;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.menu-link:hover {
+    background-color: #d9534f;
+    color: white;
+}
+
+/* Menu Items */
+.menu-items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.menu-items .item {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 250px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.menu-items .item:hover {
+    transform: translateY(-5px);
+}
+
+.menu-items .item img {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.menu-items .item h3 {
+    font-size: 1.5rem;
+    color: #d9534f;
+    margin-bottom: 5px;
+}
+
+.menu-items .item p {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.quantity-container {
+    margin: 10px 0;
+}
+
+.quantity-container label {
+    font-weight: bold;
+}
+
+.quantity-input {
+    width: 50px;
+    text-align: center;
+}
+
+.add-to-cart {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.add-to-cart:hover {
+    background-color: #c9302c;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    background-color: #d9534f;
+    color: white;
+    padding: 10px 0;
+    margin-top: 20px;
+}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification - Saha Foods</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/verifyemail.css')}}">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>Saha Foods</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/aboutus">About Us</a></li>
+                <li><a href="/contactus">Contact Us</a></li>
+                <li><a href="/FAQS">FAQS</a></li>
+                <li><a href="/policies">Our Policies</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="block verify-email">
+        <h2>Verify Your Email</h2>
+        <p>Welcome to Saha Foods! Please verify your email to complete your account setup.</p>
+        <form action="/verifyemail" method="POST">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Enter name" value="{{name}}" required>
+            
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter username" value="{{username}}" required>
+            
+            <label for="mobile">Mobile</label>
+            <input type="text" id="mobile" name="mobile" placeholder="Enter mobile number" value="{{mobile}}" required pattern="[0-9]{10}" title="Enter a valid 10-digit mobile number">
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter email" value="{{email}}" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter Password" value="{{password}}" required>
+            
+            <label for="otp">OTP</label>
+            <input type="text" id="otp" name="otp" placeholder="Enter the OTP sent to your email" required pattern="[0-9]{6}" title="Enter a valid 6-digit OTP">
+            
+            <button type="submit">Verify Email</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Saha Foods. All rights reserved.</p>
+    </footer>
+</body>
+</html>

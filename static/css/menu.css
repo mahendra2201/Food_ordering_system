@@ -1,0 +1,141 @@
+/* Styling for header */
+header {
+    background-color: #f8f8f8;
+    padding: 20px;
+    border-bottom: 2px solid #ddd;
+}
+
+header nav h1 {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    margin: 0;
+    font-size: 24px;
+    text-transform: capitalize;
+}
+
+header nav ul.navbar {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+}
+
+header nav ul.navbar li {
+    display: inline;
+}
+
+header nav ul.navbar li a {
+    text-decoration: none;
+    color: #555;
+    font-size: 18px;
+    padding: 5px 10px;
+    transition: color 0.3s ease-in-out;
+}
+
+header nav ul.navbar li a:hover {
+    color: #007BFF;
+}
+
+/* Main section */
+main .title {
+    text-align: center;
+    font-family: 'Georgia', serif;
+    color: #222;
+    font-size: 32px;
+    margin-top: 20px;
+}
+
+.categories {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+    gap: 20px;
+}
+
+.categories .category-link {
+    text-decoration: none;
+    background-color: #007BFF;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 18px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.categories .category-link:hover {
+    background-color: #0056b3;
+}
+
+/* Menu items */
+.menu-items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px auto;
+}
+
+.menu-items .item {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+    width: 250px;
+    text-align: center;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.menu-items .item img {
+    max-width: 100%;
+    border-radius: 5px;
+}
+
+.menu-items .item h3 {
+    font-size: 20px;
+    color: #333;
+    margin: 10px 0;
+}
+
+.menu-items .item p {
+    font-size: 18px;
+    color: #666;
+}
+
+.menu-items .item .quantity-container {
+    margin: 10px 0;
+}
+
+.menu-items .item .quantity-input {
+    width: 50px;
+    padding: 5px;
+    text-align: center;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+.menu-items .item button.add-to-cart {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.menu-items .item button.add-to-cart:hover {
+    background-color: #218838;
+}
+
+/* Footer styling */
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #f8f8f8;
+    border-top: 2px solid #ddd;
+    font-size: 14px;
+    color: #666;
+}

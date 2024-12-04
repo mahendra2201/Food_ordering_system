@@ -1,0 +1,103 @@
+/* General Styles for Register Page */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(120deg, #84fab0, #8fd3f4);
+    color: #333;
+}
+
+.links {
+    background: #11998e;
+    padding: 1em;
+    text-align: center;
+}
+
+.links a {
+    color: #fff;
+    margin: 0 10px;
+    text-decoration: none;
+    font-size: 1.1em;
+}
+
+.links a:hover {
+    text-decoration: underline;
+}
+
+/* Register Container */
+.container {
+    max-width: 400px;
+    margin: 3em auto;
+    padding: 2em;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Form Block */
+.block {
+    text-align: center;
+}
+
+.block h2 {
+    margin-bottom: 20px;
+    font-size: 2em;
+}
+
+.block label {
+    display: block;
+    margin: 10px 0 5px;
+    text-align: left;
+    font-size: 1em;
+}
+
+.block input {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    background: #f4f4f4;
+    color: #333;
+}
+
+.block button {
+    background: #38ef7d;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.block button:hover {
+    background: #11998e;
+}
+
+.block a {
+    color: #00b09b;
+    text-decoration: none;
+}
+
+.block a:hover {
+    text-decoration: underline;
+}
+/* Style for paragraph after the form */
+.block p {
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #555;
+}
+
+.block p a {
+    color: #007acc;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.block p a:hover {
+    text-decoration: underline;
+}

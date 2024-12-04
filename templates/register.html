@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Saha Foods</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/register.css')}}">
+</head>
+<body>
+    <!-- Main Heading -->
+    <header>
+        <h1 style="text-align: center; margin-top: 20px; color: #333; font-family: Arial, sans-serif;">
+            Welcome to Saha Foods
+        </h1>
+    </header>
+
+    <!-- Navigation Links -->
+    <div class="links">
+        <a href="/aboutus">About Us</a>
+        <a href="/contactus">Contact Us</a>
+        <a href="/policies">Our Policies</a>
+        <a href="/FAQS">FAQs</a>
+    </div>
+
+    <!-- Register Section -->
+    <div class="container">
+        <div class="block register creative-card">
+            <h2>Register</h2>
+            <form action="/registerdata" method="POST">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="Enter name" required>
+                <label for="register-username">Username</label>
+                <input type="text" id="register-username" name="username" placeholder="Enter username" required>
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter email" required>
+                <label for="mobile">Mobile</label>
+                <input type="text" id="mobile" name="mobile" placeholder="Enter mobile number" required>
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter password" required>
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm password" required>
+
+                <button type="submit">Register</button>
+            </form>
+            <p>Existing User? <a href="/home">login</a>.</p>
+        </div>
+    </div>
+</body>
+</html>
