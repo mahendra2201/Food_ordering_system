@@ -54,127 +54,107 @@ def policies():
 @app.route("/logout")
 def logout():
     return render_template("home.html")
-
-@app.route("/logindata", methods=["POST", "GET"])
-def logindata():
-    if request.method == "POST":
-        username = request.form['username']
-        password = request.form['password']
-        try:
-            conn = pymysql.connect(**db)
-            cursor = conn.cursor()
-            query = "SELECT * FROM register WHERE username=%s"
-            cursor.execute(query, (username,))
-            row = cursor.fetchone()
-
-            if row is None:
-                return "User doesn't exist. Please create an account first."
-            elif password != row[4]:
-                return "Incorrect password."
-            else:
-                # Insert login attempt into the login table
-                query = "INSERT INTO login(username, password) VALUES(%s, %s)"
-                cursor.execute(query, (username, password))
-                conn.commit()  # Commit the transaction
-
-                return render_template("userhome.html", name=username)
-        except Exception as e:
-            return f"An error occurred: {e}"
-        finally:
-            conn.close()
-    else:
-        return "<h3 style='color: red;'>Data sent in an incorrect manner.</h3>"
-
-
-@app.route("/registerdata", methods=["POST", "GET"])
+@app.route("/registerdata",methods=["POST","GET"])
 def registerdata():
-    if request.method == "POST":
-        name = request.form['name']
-        username = request.form['username']
-        email = request.form['email']
-        mobile = request.form['mobile']
-        password = request.form['password']
-        cpassword = request.form['confirm-password']
-
-        if password != cpassword:
-            return "<h1 style='color:red;'>Passwords do not match. Please try again.</h1>"
-
-        try:
-            conn = pymysql.connect(**db)
-            cursor = conn.cursor()
-            query = "SELECT * FROM register WHERE email = %s"
-            cursor.execute(query, (email,))
-            row = cursor.fetchone()
-
-            if row:
-                return "<h1 style='color:red;'>Given Email ID is already used. Please login or register with another email.</h1>"
-
-            # Generate OTP
+    if request.method=="POST":
+        name=request.form['name']
+        username=request.form['username']
+        email=request.form['email']
+        mobile=request.form['mobile']
+        password=request.form['password']
+        cpassword=request.form['confirm-password']
+        """
+        print(name)
+        print(username)
+        print(email)
+        print(mobile)
+        print(password)
+        print(cpassword)
+        """
+        if password==cpassword:
             otp1 = random.randint(111111, 999999)
-            verify_otp = str(otp1)
-
-            # Email credentials (Use environment variables instead of hardcoding)
-            from_email = "mannem.mahendra2407@gmail.com"
-            email_password = "dsju jftf aqnd wtje"
-
-            # Email sending
+            global verify_otp
+            verify_otp=str(otp1)
+            from_email = 'mannem.mahendra2407@gmail.com'
             to_email = email
-            subject = 'OTP for Validation'
-            body = f'Your OTP for validation is {verify_otp}.'
+            subject = 'OTP For Validation'
+            body = f'OTP for Validation is {verify_otp}'
 
             msg = MIMEMultipart()
             msg['From'] = from_email
             msg['To'] = to_email
-            msg['Subject'] = subject
+            msg['subject'] = subject
             msg.attach(MIMEText(body, 'plain'))
 
-            server = smtplib.SMTP('smtp.gmail.com', 587)
+            server = smtplib.SMTP('smtp.gmail.com', '587')
             server.starttls()
-            server.login(from_email, email_password)
+            server.login('mannem.mahendra2407@gmail.com', 'dsju jftf aqnd wtje')
             server.send_message(msg)
             server.quit()
 
-            return render_template("verifyemail.html", name=name, username=username, mobile=mobile, email=email, password=password, otp=verify_otp)
-
-        except pymysql.MySQLError as e:
-            return f"<h1 style='color:red;'>Database error occurred: {str(e)}</h1>"
-        except smtplib.SMTPException as e:
-            return f"<h1 style='color:red;'>Failed to send email: {str(e)}</h1>"
-        except Exception as e:
-            return f"<h1 style='color:red;'>An unexpected error occurred: {str(e)}</h1>"
-        finally:
-            cursor.close()
-            conn.close()
+            return render_template("verifyemail.html",name = name,username=username,email=email,mobile=mobile,password=password)
+        else:
+            return 'make sure that password and confirm password are same'
+        
     else:
-        return "<h1 style='color:red;'>Data sent in an incorrect manner.</h1>"
+        return "<h3 style='color : red'; >Data Get in Wrong Manner</h3>"
 
-@app.route("/verifyemail", methods=["POST", "GET"])
+@app.route("/verifyemail",methods=["POST","GET"])                                  
 def verifyemail():
-    if request.method == "POST":
-        try:
+        if request.method == "POST":
             name = request.form['name']
-            username = request.form['username']
-            mobile = request.form['mobile']
-            email = request.form['email']
-            password = request.form['password']
-            otp = request.form['otp']
-            if otp != verify_otp:
-                return "<h3 style='color: red;'>Incorrect OTP. Please try again.</h3>"
-            conn = pymysql.connect(**db)
-            cursor = conn.cursor()
-            query = "INSERT INTO register(name, username, mobile, email, password) VALUES (%s, %s, %s, %s, %s)"
-            cursor.execute(query, (name, username, mobile, email,password))
-            conn.commit()
-            return render_template("home.html")
+            username=request.form['username']
+            email=request.form['email']
+            mobile=request.form['mobile']
+            password=request.form['password']
+            otp=request.form['otp']
+            if(otp == verify_otp):
+                try:
+                    conn=pymysql.connect(**db)
+                    cursor=conn.cursor()
+                    q="INSERT INTO register(name,username,email,mobile,password) VALUES(%s,%s,%s,%s,%s)"
+                    cursor.execute(q,(name,username,email,mobile,password))
+                    conn.commit()
+                except:
+                    return "some random errors occured"
 
-        except Exception as e:
-            return "<h3 style='color: red;'>An internal error occurred. Please try again later.</h3>"
+                else:
+                    return render_template("login.html")
+            else:
+                return render_template("register.html")
+        else:
+            return "<h3 style='color : red';>Data Get in Wrong Manner</h3>"
+@app.route("/userlogin",methods=["POST","GET"])
+def userlogin():
+    if request.method == "POST":
+        username = request.form['username']
+        password = request.form['password']
+        try:
+            conn=pymysql.connect(**db)
+            cursor=conn.cursor()
+            q="select * from register where username=%s"
+            cursor.execute(q,(username,))
+            row=cursor.fetchone()
+            if(row==None):
+                return "User DOesn't Exist,Create Account First"
+            else:
+                if password!=row[4]:
+                    return "Incorrect Password"
+                else:
+                        conn=pymysql.connect(**db)
+                        cursor=conn.cursor()
+                        q="INSERT Into userlogin(username,password) values(%s,%s)"
+                        cursor.execute(q,(username,password))
+                        conn.commit()
+                        return render_template("userhome.html",name=username)
 
-        finally:
-            if 'conn' in locals():
-                conn.close()
+        except:
+            return "some random errors occured"
+
+        else:
+            return render_template("login.html")
     else:
-        return "<h3 style='color: red;'>Data sent in an incorrect manner.</h3>"
+        return "<h3 style='color : red';>Data Get in Wrong Manner</h3>"
 
 
 @app.route("/userhome", methods=["POST", "GET"])
