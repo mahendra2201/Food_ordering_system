@@ -5,8 +5,8 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import razorpay
-razorpay_key_id="rzp_test_HU0R8jEOshp2Rg"
-razorpay_key_secret="SMyH6uWarivHOaqSLt2gSULq"
+razorpay_key_id="rzp_test_zBe6YsIVVwQD1T"
+razorpay_key_secret="t4I4wMMdDBeRoZI9ZDPu8qoC"
 client=razorpay.Client(auth=(razorpay_key_id,razorpay_key_secret))
 
 verify_otp = "0"
@@ -290,32 +290,36 @@ def add_to_cart():
     else:
         return "<h3 style='color: red;'>Invalid request method</h3>", 405
 
-@app.route("/cartpage",methods=["GET"])
+@app.route("/cartpage", methods=["GET"])
 def cartpage():
-    username=request.args.get('username')
-    print(username)
+    username = request.args.get('username')
+    if not username:
+        return "Username is required", 400
+
     try:
-        conn=pymysql.connect(**db)
-        cursor=conn.cursor()
-        q="select * from cart where username=(%s)"
-        cursor.execute(q,(username))
-        rows=cursor.fetchall()
-        print("mahi")
-        print(rows)
-        grand_total=0
-        for i in rows:
-            grand_total+=int(i[4])
-            result=grand_total*100
-            order=client.order.create({
-                    'amount':result,
-                    'currency':'INR',
-                    'payment_capture':'1'
-                })
-        print(order)
-    except:
-        return "Some Random Errors Occurred"
-    else:
-        return render_template("cart.html",data=rows,grand_total=grand_total,order=order,name=username)
+        conn = pymysql.connect(**db)
+        cursor = conn.cursor()
+        q = "SELECT * FROM cart WHERE username = %s"
+        cursor.execute(q, (username,))
+        rows = cursor.fetchall()
+        
+        grand_total = sum(int(row[4]) for row in rows)
+        amount_in_paise = grand_total * 100
+
+        order = client.order.create({
+            'amount': amount_in_paise,
+            'currency': 'INR',
+            'payment_capture': '1'
+        })
+    except Exception as e:
+        app.logger.error(f"Error occurred: {e}")
+        return "Some Random Errors Occurred", 500
+    finally:
+        cursor.close()
+        conn.close()
+
+    return render_template("cart.html", data=rows, grand_total=grand_total, order=order, name=username)
+
 @app.route("/sucess",methods = ["POST","GET"])
 def sucess():
     payment_id = request.form.get("razorpay_payment_id")

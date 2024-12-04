@@ -10,11 +10,11 @@
     <header>
         <nav class="header-nav">
             <div class="logo">
-                <h1>Welcome {{name}}</h1>
+                <h1>Welcome {{ name }}</h1>
                 <h1>Saha Foods</h1>
             </div>
             <div class="navbar">
-                <a href="/menu?username={{name}}">Menu</a>
+                <a href="/menu?username={{ name }}">Menu</a>
                 <a href="/aboutus">About Us</a>
                 <a href="/contactus">Contact Us</a>
                 <a href="/policies">Our Policies</a>
@@ -55,51 +55,56 @@
             </table>
         </div>
         <div class="checkout">
-            <nav>
             <button class="pay-now" id="rzp-button1">Pay Now</button>
-            </nav>
         </div>
     </main>
-   
+
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
-        var options = {
-            "key" : "rzp_test_HU0R8jEOshp2Rg",
-            "amount" : "{{ order.amount }}",
-            "currency": "INR",
-            "name" : "Royal shop",
-            "order_id" : "{{ order.id }}",
-            "Description" : "Basic E commerce",
-            "handler" : function (response){
-                var form = document.createElement('form');
-                form.method = "POST";
-                form.action = "/sucess";
-                form.innerHTML = `
-                    <input type="hidden" name="razorpay_payment_id" value="${response.razorpay_payment_id}">
-                    <input type="hidden" name="razorpay_order_id" value="${response.razorpay_order_id}">
-                    <input type="hidden" name="razorpay_signature" value="${response.razorpay_signature}">
-                `;
-                document.body.appendChild(form);
-                form.submit();
-            },
-            "prefil" : {
-                "name" : "Saha Foods",
-                "email" : "mannem.mahendra2201@gmail.com",
-                "contact" : "+91 8919977421"
-            },
-            "theme" : {
-                "color" : "red"
-            }
-        };
-        var rzp1 = new Razorpay(options)
-        document.getElementById('rzp-button1').onclick = function(e){
-            rzp1.open();
-            e.preventDefault();
-        }
+        document.addEventListener('DOMContentLoaded', function () {
+            var options = {
+                "key": "rzp_test_zBe6YsIVVwQD1T",
+                "amount": "{{ order.amount }}",
+                "currency": "INR",
+                "name": "Saha Foods",
+                "order_id": "{{ order.id }}",
+                "description": "Your order at Saha Foods",
+                "handler": function (response) {
+                    var form = document.createElement('form');
+                    form.method = "POST";
+                    form.action = "/sucess";
+                    form.innerHTML = `
+                        <input type="hidden" name="razorpay_payment_id" value="${response.razorpay_payment_id}">
+                        <input type="hidden" name="razorpay_order_id" value="${response.razorpay_order_id}">
+                        <input type="hidden" name="razorpay_signature" value="${response.razorpay_signature}">
+                    `;
+                    document.body.appendChild(form);
+                    form.submit();
+                },
+                "prefill": {
+                    "name": "{{ name }}",
+                    "email": "mannem.mahendra2201@gmail.com",
+                    "contact": "+91 9989564329"
+                },
+                "theme": {
+                    "color": "#FF6347"
+                },
+                "modal": {
+                    "ondismiss": function () {
+                        alert("Payment process was canceled. Please try again.");
+                    }
+                }
+            };
+            var rzp1 = new Razorpay(options);
+            document.getElementById('rzp-button1').onclick = function (e) {
+                rzp1.open();
+                e.preventDefault();
+            };
+        });
     </script>
-</section>
-<footer>
-    <p>&copy; 2024 Saha Foods. All rights reserved.</p>
-</footer>
+
+    <footer>
+        <p>&copy; 2024 Saha Foods. All rights reserved.</p>
+    </footer>
 </body>
 </html>
