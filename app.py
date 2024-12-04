@@ -54,7 +54,7 @@ def policies():
 @app.route("/logout")
 def logout():
     return render_template("home.html")
-@app.route("/registerdata",methods=["POST","GET"])
+@app.route("/register",methods=["POST","GET"])
 def registerdata():
     if request.method=="POST":
         name=request.form['name']
@@ -124,7 +124,7 @@ def verifyemail():
                 return render_template("register.html")
         else:
             return "<h3 style='color : red';>Data Get in Wrong Manner</h3>"
-@app.route("/userlogin",methods=["POST","GET"])
+@app.route("/login",methods=["POST","GET"])
 def userlogin():
     if request.method == "POST":
         username = request.form['username']
@@ -143,7 +143,7 @@ def userlogin():
                 else:
                         conn=pymysql.connect(**db)
                         cursor=conn.cursor()
-                        q="INSERT Into userlogin(username,password) values(%s,%s)"
+                        q="INSERT Into login(username,password) values(%s,%s)"
                         cursor.execute(q,(username,password))
                         conn.commit()
                         return render_template("userhome.html",name=username)
