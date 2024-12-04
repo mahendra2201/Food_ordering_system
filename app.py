@@ -151,32 +151,31 @@ def registerdata():
 @app.route("/verifyemail", methods=["POST", "GET"])
 def verifyemail():
     if request.method == "POST":
-        name = request.form['name']
-        username = request.form['username']
-        mobile = request.form['mobile']
-        email = request.form['email']
-        password = request.form['password']
-        otp = request.form['otp']
+        try:
+            name = request.form['name']
+            username = request.form['username']
+            mobile = request.form['mobile']
+            email = request.form['email']
+            password = request.form['password']
+            otp = request.form['otp']
+            if otp != verify_otp:
+                return "<h3 style='color: red;'>Incorrect OTP. Please try again.</h3>"
+            conn = pymysql.connect(**db)
+            cursor = conn.cursor()
+            query = "INSERT INTO register(name, username, mobile, email, password) VALUES (%s, %s, %s, %s, %s)"
+            cursor.execute(query, (name, username, mobile, email,password))
+            conn.commit()
+            return render_template("home.html")
 
-        if otp == verify_otp:
-            try:
-                conn = pymysql.connect(**db)
-                cursor = conn.cursor()
+        except Exception as e:
+            return "<h3 style='color: red;'>An internal error occurred. Please try again later.</h3>"
 
-                query = "INSERT INTO register(name, username, mobile, email, password) VALUES (%s, %s, %s, %s, %s)"
-                cursor.execute(query, (name, username, mobile, email, password))
-                conn.commit()
-            except Exception as e:
-                return f"An error occurred: {e}"
-                
-            else:
-                return render_template("home.html")
-            finally:
+        finally:
+            if 'conn' in locals():
                 conn.close()
-        else:
-            return "<h3 style='color: red;'>Incorrect OTP. Please try again.</h3>"
     else:
         return "<h3 style='color: red;'>Data sent in an incorrect manner.</h3>"
+
 
 @app.route("/userhome", methods=["POST", "GET"])
 def userhome():
