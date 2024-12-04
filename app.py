@@ -114,13 +114,15 @@ def verifyemail():
                     cursor=conn.cursor()
                     q="INSERT INTO register(name,username,email,mobile,password) VALUES(%s,%s,%s,%s,%s)"
                     cursor.execute(q,(name,username,email,mobile,password))
-                except:
+                except Exception as e:
+                    print(e)
                     return "some random errors occured"
 
                 else:
                     t1=f"create table cart_{username}(username varchar(100),fooditem varchar(100),quantity varchar(100),price varchar(100),total_price varchar(100))"
                     cursor.execute(t1)
-                    cursor.commit()
+                    conn.commit()
+                    conn.close()
                     return render_template("login.html")
             else:
                 return render_template("register.html")
@@ -150,7 +152,8 @@ def userlogin():
                         conn.commit()
                         return render_template("userhome.html",name=username)
 
-        except:
+        except Exception as e:
+            print(e)
             return "some random errors occured"
 
         else:
@@ -244,7 +247,7 @@ def add_to_cart():
 
             conn = pymysql.connect(**db)
             cursor = conn.cursor()
-            q1 = "SELECT * FROM cart WHERE username = %s AND fooditem = %s"
+            q1 = f"SELECT * FROM cart_{user1} WHERE username = %s AND fooditem = %s"
             cursor.execute(q1, (user1, fooditem))
             row = cursor.fetchone()
             print(row)
@@ -252,7 +255,7 @@ def add_to_cart():
             if row:
                 update_quantity = str(int(row[2]) + int(quantity))
                 updated_total_price = str(int(row[4]) + int(totalprice))
-                q2 = "UPDATE cart SET quantity = %s, total_price = %s WHERE fooditem = %s AND username = %s"
+                q2 = f"UPDATE cart_{user1} SET quantity = %s, total_price = %s WHERE fooditem = %s AND username = %s"
                 cursor.execute(q2, (update_quantity, updated_total_price, fooditem, user1))
             else:
                 q = f"INSERT INTO cart_{user1}(username, fooditem, quantity, price, total_price) VALUES (%s, %s, %s, %s, %s)"
@@ -282,7 +285,7 @@ def cartpage():
     try:
         conn = pymysql.connect(**db)
         cursor = conn.cursor()
-        q = "SELECT * FROM cart WHERE username = %s"
+        q = f"SELECT * FROM cart_{username} WHERE username = %s"
         cursor.execute(q, (username,))
         rows = cursor.fetchall()
         
@@ -316,19 +319,23 @@ def sucess():
     try:
         client.utility.verify_payment_signature(dict1)
         user1 = request.args.get('username')
+        
         if(user1 is None):
             return "User Not Found"
         else:
             conn=pymysql.connect(**db)
             cursor=conn.cursor()
-            q="truncate table cart"
+            q=f"truncate table cart_{user1}"
             cursor.execute(q)
             conn.commit()
             conn.close()
-            return render_template("sucess.html") 
     
-    except:
+    except Exception as e:
+        print(user1)
+        print(e)
         return render_template("failure.html")
+    else:
+        return render_template("sucess.html") 
 
 
 if __name__ == "__main__":
