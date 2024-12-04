@@ -245,35 +245,51 @@ def nonvegetarian_menu():
 @app.route("/orders", methods=["POST", "GET"])
 def orders():
     pass
-@app.route("/add_to_cart",methods=["POST","GET"])
+@app.route("/add_to_cart", methods=["POST", "GET"])
 def add_to_cart():
-    if request.method=="POST":
-        user1=request.args.get('username')
-        fooditem=request.form["fooditem"]
-        quantity=request.form["quantity"]
-        price=request.form["price"]
-        print(user1)
-        print(fooditem)
-        print(quantity)
-        print(price)
-        totalprice=int(price)*int(quantity)
-        totalprice=str(totalprice)
-        print(totalprice)
-
+    if request.method == "POST":
         try:
-            conn=pymysql.connect(**db)
-            cursor=conn.cursor()
-            q="INSERT Into cart(username,fooditem,quantity,price,total_price) values(%s,%s,%s,%s,%s)"
-            cursor.execute(q,(user1,fooditem,quantity,price,totalprice))
-            conn.commit()
-        except Exception as e:
-            print(e)
-            return "some random errors occured"
+            user1 = request.args.get('username')
+            fooditem = request.form["fooditem"]
+            quantity = request.form["quantity"]
+            price = request.form["price"]
 
-        else:
-            return menu()
+            if not user1 or not fooditem or not quantity or not price:
+                raise ValueError("Missing required input data.")
+
+            totalprice = str(int(price) * int(quantity))
+
+            conn = pymysql.connect(**db)
+            cursor = conn.cursor()
+            q1 = "SELECT * FROM cart WHERE username = %s AND fooditem = %s"
+            cursor.execute(q1, (user1, fooditem))
+            row = cursor.fetchone()
+            print(row)
+
+            if row:
+                update_quantity = str(int(row[2]) + int(quantity))
+                updated_total_price = str(int(row[4]) + int(totalprice))
+                q2 = "UPDATE cart SET quantity = %s, total_price = %s WHERE fooditem = %s AND username = %s"
+                cursor.execute(q2, (update_quantity, updated_total_price, fooditem, user1))
+            else:
+                q = "INSERT INTO cart (username, fooditem, quantity, price, total_price) VALUES (%s, %s, %s, %s, %s)"
+                cursor.execute(q, (user1, fooditem, quantity, price, totalprice))
+
+        except pymysql.MySQLError as db_error:
+            return f"Database error occurred: {str(db_error)}", 500
+        except ValueError as value_error:
+            return f"Input validation error: {str(value_error)}", 400
+        except Exception as e:
+            return f"An unexpected error occurred: {str(e)}", 500
+        finally:
+            if 'conn' in locals() and conn.open:
+                conn.commit()
+                conn.close()
+
+        return menu()
     else:
-        return "<h3 style='color : red';>Data Get in Wrong Manner</h3>"
+        return "<h3 style='color: red;'>Invalid request method</h3>", 405
+
 @app.route("/cartpage",methods=["GET"])
 def cartpage():
     username=request.args.get('username')
@@ -284,6 +300,7 @@ def cartpage():
         q="select * from cart where username=(%s)"
         cursor.execute(q,(username))
         rows=cursor.fetchall()
+        print("mahi")
         print(rows)
         grand_total=0
         for i in rows:

@@ -7,9 +7,21 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/nonveg.css') }}">
 </head>
 <body>
+    <header>
+        <nav>
+            <ul class="navbar">
+                <li><a href="/menu?username={{ name }}">Menu</a></li>
+                <li><a href="/order">Orders</a></li>
+                <li><a href="/aboutus">About Us</a></li>
+                <li><a href="/contactus">Contact Us</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
     <main>
         <div>
-            <h1>WELCOME   {{ name }} </h1>
+            <h1>WELCOME {{ name }}</h1>
         </div>
         <h1 class="title">Non-Vegetarian Menu</h1>
 
@@ -25,16 +37,23 @@
                 <img src="{{ item.image_url }}" alt="{{ item.name }}">
                 <h3>{{ item.name }}</h3>
                 <p>{{ item.price }}/-</p>
-                <div class="quantity-container">
-                    <input type="hidden" name="fooditem" value={{item.name}}>
-                    <input type="hidden" name="price" value={{item.price}}>
-                    <label for="quantity-{{ loop.index }}">Quantity:</label>
-                    <input type="number" id="quantity-{{ loop.index }}" min="1" max="10" value="1" class="quantity-input">
-                </div>
-                <button class="add-to-cart">Add to Cart</button>
+                <form action="/add_to_cart?username={{ name }}" method="post">
+                    <div class="quantity-container">
+                        <input type="hidden" name="fooditem" value="{{ item.name }}">
+                        <input type="hidden" name="price" value="{{ item.price }}">
+                        
+                        <label for="quantity-{{ loop.index }}">Quantity:</label>
+                        <input type="number" id="quantity-{{ loop.index }}" name="quantity" min="1" max="10" value="1" class="quantity-input">
+                    </div>
+                    <button type="submit" class="add-to-cart">Add to Cart</button>
+                </form>
             </div>
             {% endfor %}
         </div>
     </main>
+
+    <footer>
+        <p>&copy; 2024 Our Restaurant. All rights reserved.</p>
+    </footer>
 </body>
 </html>
