@@ -332,7 +332,18 @@ def sucess():
     }
     try:
         client.utility.verify_payment_signature(dict1)
-        return render_template("sucess.html")
+        user1 = request.args.get('username')
+        if(user1 is None):
+            return "User Not Found"
+        else:
+            conn=pymysql.connect(**db)
+            cursor=conn.cursor()
+            q="truncate table cart"
+            cursor.execute(q)
+            conn.commit()
+            conn.close()
+            return render_template("sucess.html") 
+    
     except:
         return render_template("failure.html")
 
