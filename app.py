@@ -114,11 +114,13 @@ def verifyemail():
                     cursor=conn.cursor()
                     q="INSERT INTO register(name,username,email,mobile,password) VALUES(%s,%s,%s,%s,%s)"
                     cursor.execute(q,(name,username,email,mobile,password))
-                    conn.commit()
                 except:
                     return "some random errors occured"
 
                 else:
+                    t1=f"create table cart_{username}(username varchar(100),fooditem varchar(100),quantity varchar(100),price varchar(100),total_price varchar(100))"
+                    cursor.execute(t1)
+                    cursor.commit()
                     return render_template("login.html")
             else:
                 return render_template("register.html")
@@ -253,9 +255,7 @@ def add_to_cart():
                 q2 = "UPDATE cart SET quantity = %s, total_price = %s WHERE fooditem = %s AND username = %s"
                 cursor.execute(q2, (update_quantity, updated_total_price, fooditem, user1))
             else:
-                t1=f"create table cart_{user1}(username varchar(100),fooditem varchar(100),quantity varchar(100),price varchar(100),total_price varchar(100))"
-                cursor.execute(t1)
-                q = "INSERT INTO cart (username, fooditem, quantity, price, total_price) VALUES (%s, %s, %s, %s, %s)"
+                q = f"INSERT INTO cart_{user1}(username, fooditem, quantity, price, total_price) VALUES (%s, %s, %s, %s, %s)"
                 cursor.execute(q, (user1, fooditem, quantity, price, totalprice))
 
         except pymysql.MySQLError as db_error:
