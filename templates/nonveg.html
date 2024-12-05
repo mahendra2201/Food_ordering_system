@@ -8,10 +8,13 @@
 </head>
 <body>
     <header>
+        <div class="welcome">
+            <h1>WELCOME {{ name }}</h1>
+        </div>
         <nav>
             <ul class="navbar">
-                <li><a href="/menu?username={{ name }}">Menu</a></li>
-                <li><a href="/order">Orders</a></li>
+                <li><a href="/menu?username={{name}}">Menu</a></li>
+                <li><a href="/orders?username={{name}}">Orders</a></li>
                 <li><a href="/aboutus">About Us</a></li>
                 <li><a href="/contactus">Contact Us</a></li>
                 <li><a href="/logout">Logout</a></li>
@@ -20,28 +23,23 @@
     </header>
 
     <main>
-        <div>
-            <h1>WELCOME {{ name }}</h1>
-        </div>
-        <h1 class="title">Non-Vegetarian Menu</h1>
-
-        <!-- Link to Vegetarian Menu on the right -->
-        <div class="menu-link-container">
-            <a href="/veg?username={{ name }}" class="menu-link">Vegetarian Menu</a>
+        <div class="menu-title">
+            <h1>Non-Vegetarian Menu</h1>
+            <a href="/veg?username={{ name }}" class="menu-switch">Go to Vegetarian Menu</a>
         </div>
 
         <!-- Non-Vegetarian Menu Items -->
         <div class="menu-items">
             {% for item in items %}
-            <div class="item">
+            <div class="menu-card">
                 <img src="{{ item.image_url }}" alt="{{ item.name }}">
                 <h3>{{ item.name }}</h3>
-                <p>{{ item.price }}/-</p>
+                <p class="price">₹{{ item.price }}</p>
                 <form action="/add_to_cart?username={{ name }}" method="post">
                     <div class="quantity-container">
                         <input type="hidden" name="fooditem" value="{{ item.name }}">
                         <input type="hidden" name="price" value="{{ item.price }}">
-                        
+
                         <label for="quantity-{{ loop.index }}">Quantity:</label>
                         <input type="number" id="quantity-{{ loop.index }}" name="quantity" min="1" max="10" value="1" class="quantity-input">
                     </div>

@@ -10,36 +10,44 @@
     <header>
         <nav>
             <ul>
-                <li><a href="/index">Home</a></li>
-                <li><a href="/menu">Menu</a></li>
-                <li><a href="/order">Order</a></li>
+                <li><a href="/menu?username={{name}}">Menu</a></li>
                 <li><a href="/aboutus">About Us</a></li>
                 <li><a href="/contactus">Contact Us</a></li>
+                <li><a href="/logout">Logout</a></li>
             </ul>
         </nav>
     </header>
-
-    <main>
-        <h1>Place Your Order</h1>
-        <form action="#" method="post">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-
-            <label for="item">Select Item:</label>
-            <select id="item" name="item">
-                <option value="pizza">Pizza</option>
-                <option value="burger">Burger</option>
-                <option value="pasta">Pasta</option>
-            </select>
-
-            <label for="quantity">Quantity:</label>
-            <input type="number" id="quantity" name="quantity" min="1" required>
-
-            <button type="submit" class="btn">Submit Order</button>
-        </form>
+    <main class="cart-page">
+        <div class="welcome-message">
+            <h1>WELCOME {{name}}</h1>
+        </div>
+        <h2>Your Orders</h2>
+        <div class="cart-container">
+            <table class="cart-table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Food Item</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Subtotal</th>
+                        <th>Date & Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in data %}
+                    <tr>
+                        <td>{{ row[0] }}</td>
+                        <td>{{ row[1] }}</td>
+                        <td>{{ row[2] }}</td>
+                        <td>{{ row[3] }}</td>
+                        <td>{{ row[4] }}</td>
+                        <td>{{ row[5] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </main>
 </body>
 </html>

@@ -8,6 +8,7 @@ import razorpay
 razorpay_key_id="rzp_test_zBe6YsIVVwQD1T"
 razorpay_key_secret="t4I4wMMdDBeRoZI9ZDPu8qoC"
 client=razorpay.Client(auth=(razorpay_key_id,razorpay_key_secret))
+from datetime import datetime
 
 verify_otp = "0"
 db = {
@@ -121,6 +122,8 @@ def verifyemail():
                 else:
                     t1=f"create table cart_{username}(username varchar(100),fooditem varchar(100),quantity varchar(100),price varchar(100),total_price varchar(100))"
                     cursor.execute(t1)
+                    t2 = f"CREATE TABLE order_{username} (username VARCHAR(100),fooditem VARCHAR(100),quantity VARCHAR(100),price VARCHAR(100),total_price VARCHAR(100),dat_time DATETIME DEFAULT CURRENT_TIMESTAMP)"
+                    cursor.execute(t2)
                     conn.commit()
                     conn.close()
                     return render_template("login.html")
@@ -230,7 +233,34 @@ def nonvegetarian_menu():
 
 @app.route("/orders", methods=["POST", "GET"])
 def orders():
-    pass
+    user1 = request.args.get('username')
+    print(f"Fetching orders for user: {user1}")
+    if not user1:
+        return "<h1 style='color:red'>Invalid User</h1>"
+    try:
+        conn = pymysql.connect(**db)
+        cursor = conn.cursor()
+        Q = f"SELECT * FROM order_{user1}"
+        cursor.execute(Q)
+        rows = cursor.fetchall()
+        print(f"Orders fetched: {rows}")
+        if not rows:
+            return "<h1 style='color:red'>You Haven't Ordered Anything</h1>"
+        return render_template("order.html", data=rows, name=user1)
+    
+    except pymysql.MySQLError as e:
+        print(f"Database error: {e}")
+        return "<h1 style='color:red'>Error accessing your orders. Please try again later.</h1>"
+    
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return "<h1 style='color:red'>An unexpected error occurred. Please try again.</h1>"
+    
+    finally:
+        if 'conn' in locals() and conn.open:
+            conn.commit()
+            conn.close()
+
 @app.route("/add_to_cart", methods=["POST", "GET"])
 def add_to_cart():
     if request.method == "POST":
@@ -325,6 +355,19 @@ def sucess():
         else:
             conn=pymysql.connect(**db)
             cursor=conn.cursor()
+            a=f"select * from cart_{user1} where username=(%s)"
+            cursor.execute(a,(user1,))
+            rows=cursor.fetchall()
+            for row in rows:
+                username=row[0]
+                fooditem=row[1]
+                quantity=row[2]
+                price=row[3]
+                total_price=row[4]
+                current_datetime = datetime.now()
+
+                b=f"insert into order_{user1} values(%s,%s,%s,%s,%s,%s)"
+                cursor.execute(b,(username,fooditem,quantity,price,total_price,current_datetime))
             q=f"truncate table cart_{user1}"
             cursor.execute(q)
             conn.commit()

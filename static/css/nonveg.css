@@ -1,131 +1,175 @@
-/* General Styles */
+/* General Reset */
 body {
-    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #fdf2f2; /* Soft light red background */
-    color: #333; /* Default text color */
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
 }
 
-/* Welcome Section */
-main h1 {
+/* Header Styling */
+header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 1rem 0.5rem;
     text-align: center;
-    color: #d9534f; /* Bold red color for welcome and title */
-    font-size: 2.5rem;
-    margin: 20px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-main h1.title {
-    font-size: 2rem;
-    margin-top: 10px;
+header .welcome h1 {
+    margin: 0;
+    font-size: 1.5rem;
 }
 
-/* Special styling for the welcome message */
-main div h1 {
-    background-color: #f8d7da; /* Light red background */
-    color: #721c24; /* Darker red text */
-    padding: 15px 20px;
-    border-radius: 10px;
-    margin: 0 auto;
-    display: inline-block;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+nav {
+    margin-top: 0.5rem;
 }
 
-/* Menu Link Container */
-.menu-link-container {
-    text-align: center;
-    margin: 20px 0;
+.navbar {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
 }
 
-.menu-link {
+.navbar li {
+    margin: 0 1rem;
+}
+
+.navbar a {
     text-decoration: none;
-    color: #d9534f;
-    font-size: 1.2rem;
+    color: white;
     font-weight: bold;
-    border: 2px solid #d9534f;
-    padding: 10px 20px;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
     border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.navbar a:hover {
+    background-color: #3E8E41;
+}
+
+/* Main Section */
+main {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.menu-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+}
+
+.menu-title h1 {
+    font-size: 1.8rem;
+    color: #333;
+}
+
+.menu-switch {
+    text-decoration: none;
+    color: #4CAF50;
+    font-weight: bold;
+    font-size: 1rem;
+    border: 2px solid #4CAF50;
+    border-radius: 5px;
+    padding: 0.3rem 0.6rem;
     transition: all 0.3s ease;
 }
 
-.menu-link:hover {
-    background-color: #d9534f;
+.menu-switch:hover {
+    background-color: #4CAF50;
     color: white;
 }
 
 /* Menu Items */
 .menu-items {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
 }
 
-.menu-items .item {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    width: 250px;
+.menu-card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
     text-align: center;
-    transition: transform 0.3s ease;
+    padding: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.menu-items .item:hover {
-    transform: translateY(-5px);
+.menu-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
-.menu-items .item img {
+.menu-card img {
     width: 100%;
-    border-radius: 10px;
-    margin-bottom: 10px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
 }
 
-.menu-items .item h3 {
-    font-size: 1.5rem;
-    color: #d9534f;
-    margin-bottom: 5px;
-}
-
-.menu-items .item p {
+.menu-card h3 {
+    margin: 1rem 0 0.5rem;
     font-size: 1.2rem;
-    margin-bottom: 10px;
+    color: #4CAF50;
+}
+
+.price {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 1rem;
 }
 
 .quantity-container {
-    margin: 10px 0;
-}
-
-.quantity-container label {
-    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
 }
 
 .quantity-input {
-    width: 50px;
+    width: 60px;
+    padding: 0.3rem;
     text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 5px;
 }
 
 .add-to-cart {
-    background-color: #d9534f;
+    background-color: #4CAF50;
     color: white;
+    padding: 0.5rem 1rem;
     border: none;
-    padding: 10px 20px;
     border-radius: 5px;
     font-size: 1rem;
+    font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .add-to-cart:hover {
-    background-color: #c9302c;
+    background-color: #3E8E41;
 }
 
-/* Footer */
+/* Footer Styling */
 footer {
     text-align: center;
-    background-color: #d9534f;
+    background-color: #4CAF50;
     color: white;
-    padding: 10px 0;
-    margin-top: 20px;
+    padding: 1rem;
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
