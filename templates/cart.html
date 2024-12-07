@@ -14,7 +14,8 @@
                 <h1>Saha Foods</h1>
             </div>
             <div class="navbar">
-                <a href="/menu?username={{ name }}">Menu</a>
+                <a href="/menu?username={{name}}">Menu</a>
+                <a href="/orders?username={{name}}">name</a>
                 <a href="/aboutus">About Us</a>
                 <a href="/contactus">Contact Us</a>
                 <a href="/policies">Our Policies</a>
@@ -63,7 +64,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var options = {
-                "key": "rzp_test_zBe6YsIVVwQD1T",
+                "key": "rzp_test_9Tl8MfHxRWZu0z",
                 "amount": "{{ order.amount }}",
                 "currency": "INR",
                 "name": "Saha Foods",

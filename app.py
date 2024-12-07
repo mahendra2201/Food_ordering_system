@@ -5,17 +5,17 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import razorpay
-razorpay_key_id="rzp_test_zBe6YsIVVwQD1T"
-razorpay_key_secret="t4I4wMMdDBeRoZI9ZDPu8qoC"
+razorpay_key_id="rzp_test_9Tl8MfHxRWZu0z"
+razorpay_key_secret="Qo4MSyZgolQY998ptG1H7cmW"
 client=razorpay.Client(auth=(razorpay_key_id,razorpay_key_secret))
 from datetime import datetime
 
 verify_otp = "0"
 db = {
-    "host": "localhost",
-    "password": "root",
-    "user": "root",
-    "database": "sahafoods"
+    "host": "mahendra2201.mysql.pythonanywhere-services.com",
+    "password": "Mjrams2407@",
+    "user": "mahendra2201",
+    "database": "mahendra2201$FoodHotel"
 }
 
 app = Flask(__name__)
@@ -100,38 +100,51 @@ def registerdata():
     else:
         return "<h3 style='color : red'; >Data Get in Wrong Manner</h3>"
 
-@app.route("/verifyemail",methods=["POST","GET"])                                  
+@app.route("/verifyemail", methods=["POST", "GET"])                                  
 def verifyemail():
-        if request.method == "POST":
-            name = request.form['name']
-            username=request.form['username']
-            email=request.form['email']
-            mobile=request.form['mobile']
-            password=request.form['password']
-            otp=request.form['otp']
-            if(otp == verify_otp):
-                try:
-                    conn=pymysql.connect(**db)
-                    cursor=conn.cursor()
-                    q="INSERT INTO register(name,username,email,mobile,password) VALUES(%s,%s,%s,%s,%s)"
-                    cursor.execute(q,(name,username,email,mobile,password))
-                except Exception as e:
-                    print(e)
-                    return "some random errors occured"
+    if request.method == "POST":
+        name = request.form['name']
+        username = request.form['username']
+        email = request.form['email']
+        mobile = request.form['mobile']
+        password = request.form['password']
+        otp = request.form['otp']
+        if otp == verify_otp:
+            try:
+                conn = pymysql.connect(**db)
+                cursor = conn.cursor()
+                check_query = "SELECT * FROM register WHERE email = %s OR username = %s"
+                cursor.execute(check_query, (email, username))
+                existing_user = cursor.fetchone()
+                
+                if existing_user:
+                    return "<h3 style='color: red;'>User already exists with the given email or username.</h3>"
+                
+                insert_query = "INSERT INTO register(name, username, email, mobile, password) VALUES (%s, %s, %s, %s, %s)"
+                cursor.execute(insert_query, (name, username, email, mobile, password))
 
-                else:
-                    t1=f"create table cart_{username}(username varchar(100),fooditem varchar(100),quantity varchar(100),price varchar(100),total_price varchar(100))"
-                    cursor.execute(t1)
-                    t2 = f"CREATE TABLE order_{username} (username VARCHAR(100),fooditem VARCHAR(100),quantity VARCHAR(100),price VARCHAR(100),total_price VARCHAR(100),dat_time DATETIME DEFAULT CURRENT_TIMESTAMP)"
-                    cursor.execute(t2)
-                    conn.commit()
-                    conn.close()
-                    return render_template("login.html")
-            else:
-                return render_template("register.html")
+                t1 = f"CREATE TABLE cart_{username} (username VARCHAR(100), fooditem VARCHAR(100), quantity VARCHAR(100), price VARCHAR(100), total_price VARCHAR(100))"
+                cursor.execute(t1)
+
+                t2 = f"CREATE TABLE order_{username} (username VARCHAR(100), fooditem VARCHAR(100), quantity VARCHAR(100), price VARCHAR(100), total_price VARCHAR(100), dat_time DATETIME DEFAULT CURRENT_TIMESTAMP)"
+                cursor.execute(t2)
+
+                conn.commit()
+                return render_template("login.html")
+
+            except Exception as e:
+                print(e)
+                return "<h3 style='color: red;'>An error occurred while processing your request.</h3>"
+
+            finally:
+                conn.close()
+
         else:
-            return "<h3 style='color : red';>Data Get in Wrong Manner</h3>"
-@app.route("/login",methods=["POST","GET"])
+            return "<h3 style='color: red;'>Invalid OTP. Please try again.</h3>"
+
+    else:
+        return "<h3 style='color: red;'>Invalid request method.</h3>"
+@app.route("/userslogin", methods=["POST", "GET"]) 
 def userlogin():
     if request.method == "POST":
         username = request.form['username']
@@ -150,7 +163,7 @@ def userlogin():
                 else:
                         conn=pymysql.connect(**db)
                         cursor=conn.cursor()
-                        q="INSERT Into login(username,password) values(%s,%s)"
+                        q="insert into login(username,password) values(%s,%s)"
                         cursor.execute(q,(username,password))
                         conn.commit()
                         return render_template("userhome.html",name=username)
@@ -277,7 +290,7 @@ def add_to_cart():
 
             conn = pymysql.connect(**db)
             cursor = conn.cursor()
-            q1 = f"SELECT * FROM cart_{user1} WHERE username = %s AND fooditem = %s"
+            q1 = f"select * from cart_{user1} where username = %s and fooditem = %s"
             cursor.execute(q1, (user1, fooditem))
             row = cursor.fetchone()
             print(row)
@@ -285,10 +298,10 @@ def add_to_cart():
             if row:
                 update_quantity = str(int(row[2]) + int(quantity))
                 updated_total_price = str(int(row[4]) + int(totalprice))
-                q2 = f"UPDATE cart_{user1} SET quantity = %s, total_price = %s WHERE fooditem = %s AND username = %s"
+                q2 = f"update cart_{user1} set quantity = %s, total_price = %s where fooditem = %s and username = %s"
                 cursor.execute(q2, (update_quantity, updated_total_price, fooditem, user1))
             else:
-                q = f"INSERT INTO cart_{user1}(username, fooditem, quantity, price, total_price) VALUES (%s, %s, %s, %s, %s)"
+                q = f"insert into cart_{user1}(username, fooditem, quantity, price, total_price) VALUES (%s, %s, %s, %s, %s)"
                 cursor.execute(q, (user1, fooditem, quantity, price, totalprice))
 
         except pymysql.MySQLError as db_error:
@@ -315,7 +328,7 @@ def cartpage():
     try:
         conn = pymysql.connect(**db)
         cursor = conn.cursor()
-        q = f"SELECT * FROM cart_{username} WHERE username = %s"
+        q = f"select * from cart_{username} where username = %s"
         cursor.execute(q, (username,))
         rows = cursor.fetchall()
         
@@ -336,50 +349,82 @@ def cartpage():
 
     return render_template("cart.html", data=rows, grand_total=grand_total, order=order, name=username)
 
-@app.route("/sucess",methods = ["POST","GET"])
-def sucess():
+from flask import Flask, request, render_template
+import pymysql
+from datetime import datetime
+from razorpay import Client
+
+# Initialize Flask app
+app = Flask(__name__)
+
+# Razorpay client setup
+client = Client(auth=("your_key_id", "your_key_secret"))
+
+# Database connection credentials
+db = {
+    'host': 'localhost',
+    'user': 'your_user',
+    'password': 'your_password',
+    'database': 'your_database'
+}
+
+@app.route("/success", methods=["POST", "GET"])
+def success():
+    # Retrieve Razorpay parameters
     payment_id = request.form.get("razorpay_payment_id")
     order_id = request.form.get("razorpay_order_id")
     signature = request.form.get("razorpay_signature")
+
     dict1 = {
-        'razorpay_order_id' : order_id,
-        'razorpay_payment_id' : payment_id,
-        'razorpay_signature' : signature
+        'razorpay_order_id': order_id,
+        'razorpay_payment_id': payment_id,
+        'razorpay_signature': signature
     }
+
     try:
+        # Verify Razorpay payment signature
         client.utility.verify_payment_signature(dict1)
         user1 = request.args.get('username')
-        
-        if(user1 is None):
+
+        if user1 is None:
             return "User Not Found"
-        else:
-            conn=pymysql.connect(**db)
-            cursor=conn.cursor()
-            a=f"select * from cart_{user1} where username=(%s)"
-            cursor.execute(a,(user1,))
-            rows=cursor.fetchall()
-            for row in rows:
-                username=row[0]
-                fooditem=row[1]
-                quantity=row[2]
-                price=row[3]
-                total_price=row[4]
-                current_datetime = datetime.now()
 
-                b=f"insert into order_{user1} values(%s,%s,%s,%s,%s,%s)"
-                cursor.execute(b,(username,fooditem,quantity,price,total_price,current_datetime))
-            q=f"truncate table cart_{user1}"
-            cursor.execute(q)
-            conn.commit()
-            conn.close()
-    
+        # Establish database connection
+        conn = pymysql.connect(**db)
+        cursor = conn.cursor()
+
+        # Retrieve cart data for the user
+        query_cart = f"SELECT * FROM cart_{user1} WHERE username = %s"
+        cursor.execute(query_cart, (user1,))
+        rows = cursor.fetchall()
+
+        for row in rows:
+            username = row[0]
+            fooditem = row[1]
+            quantity = row[2]
+            price = row[3]
+            total_price = row[4]
+            current_datetime = datetime.now()
+
+            # Insert data into order table
+            query_order = f"INSERT INTO order_{user1} VALUES (%s, %s, %s, %s, %s, %s)"
+            cursor.execute(query_order, (username, fooditem, quantity, price, total_price, current_datetime))
+
+        # Clear user's cart
+        query_truncate_cart = f"TRUNCATE TABLE cart_{user1}"
+        cursor.execute(query_truncate_cart)
+
+        # Commit changes and close connection
+        conn.commit()
+        conn.close()
+
     except Exception as e:
-        print(user1)
-        print(e)
-        return render_template("failure.html")
+        # Handle any exception
+        print(f"Error for user {user1}: {e}")
+        return render_template("failure.html", name=user1)
     else:
-        return render_template("sucess.html") 
-
+        # Render success page on successful completion
+        return render_template("success.html", name=user1)
 
 if __name__ == "__main__":
     app.run(port=5001)

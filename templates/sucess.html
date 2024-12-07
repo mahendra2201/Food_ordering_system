@@ -4,16 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transaction Successful</title>
-    <link rel="stylesheet" href="{{url_for('static',filename='css/sucess.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/success.css') }}">
 </head>
 <body>
-    <div class="transaction-page success">
+    <header class="header">
+        <h1>Welcome, {{ name }}</h1>
+    </header>
+    <main class="transaction-page success">
         <div class="transaction-message">
             <h1>Transaction Successful!</h1>
             <p>Your payment has been processed successfully. Thank you for shopping with us!</p>
-            <a href="/userhome" class="btn">Go to Home</a>
-            <!-- <a href="cart.html" class="btn secondary">View Orders</a> -->
+            <div class="button-container">
+                <a href="/userhome?username={{ name }}" class="btn primary">Go to Home</a>
+                <a href="/orders?username={{ name }}" class="btn secondary">View Orders</a>
+            </div>
         </div>
-    </div>
+    </main>
 </body>
 </html>

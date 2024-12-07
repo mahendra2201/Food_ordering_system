@@ -1,89 +1,82 @@
 /* General Reset */
-* {
+body, h1, p, a {
     margin: 0;
     padding: 0;
+    font-family: 'Arial', sans-serif;
     box-sizing: border-box;
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f7f7f7;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
     height: 100vh;
+    margin: 0;
+    background: #f3f4f6;
     color: #333;
 }
 
-/* Transaction Page */
-.transaction-page {
-    width: 100%;
-    max-width: 600px;
-    padding: 40px;
-    border-radius: 10px;
+.header {
     text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: #4CAF50;
 }
 
-.transaction-page.success {
-    background-color: #e8f5e9;
-    color: #388e3c;
-}
-
-.transaction-page.failed {
-    background-color: #ffebee;
-    color: #d32f2f;
+.transaction-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    text-align: center;
 }
 
 .transaction-message h1 {
-    font-size: 2.5em;
-    margin-bottom: 20px;
+    font-size: 2rem;
+    color: #4CAF50;
+    margin-bottom: 10px;
 }
 
 .transaction-message p {
-    font-size: 1.2em;
-    margin-bottom: 30px;
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.button-container {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
 }
 
 .btn {
-    display: inline-block;
     text-decoration: none;
-    padding: 12px 25px;
+    padding: 10px 20px;
     border-radius: 5px;
-    font-size: 1em;
-    font-weight: bold;
-    color: white;
-    background-color: #8B0000;
-    margin: 5px;
-    transition: background-color 0.3s;
+    font-size: 1rem;
+    text-align: center;
+    transition: background-color 0.3s ease;
 }
 
-.btn:hover {
-    background-color: #6a0000;
+.btn.primary {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+.btn.primary:hover {
+    background-color: #45a049;
 }
 
 .btn.secondary {
-    background-color: #555;
+    background-color: #f1f1f1;
+    color: #333;
 }
 
 .btn.secondary:hover {
-    background-color: #333;
-}
-
-/* Success-Specific */
-.transaction-page.success .btn {
-    background-color: #388e3c;
-}
-
-.transaction-page.success .btn:hover {
-    background-color: #2e7d32;
-}
-
-/* Failed-Specific */
-.transaction-page.failed .btn {
-    background-color: #d32f2f;
-}
-
-.transaction-page.failed .btn:hover {
-    background-color: #b71c1c;
+    background-color: #ddd;
 }
