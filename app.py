@@ -12,10 +12,10 @@ from datetime import datetime
 
 verify_otp = "0"
 db = {
-    "host": "mahendra2201.mysql.pythonanywhere-services.com",
-    "password": "Mjrams2407@",
-    "user": "mahendra2201",
-    "database": "mahendra2201$FoodHotel"
+    "host": "localhost",
+    "password": "root",
+    "user": "root",
+    "database": "sahafoods"
 }
 
 app = Flask(__name__)
@@ -144,7 +144,7 @@ def verifyemail():
 
     else:
         return "<h3 style='color: red;'>Invalid request method.</h3>"
-@app.route("/userslogin", methods=["POST", "GET"]) 
+@app.route("/userlogin", methods=["POST", "GET"]) 
 def userlogin():
     if request.method == "POST":
         username = request.form['username']
@@ -180,7 +180,8 @@ def userlogin():
 
 @app.route("/userhome", methods=["POST", "GET"])
 def userhome():
-    return render_template("userhome.html",)
+    user1=request.args.get('username')
+    return render_template("userhome.html",name=user1)
 
 @app.route("/menu", methods=["POST", "GET"])
 def menu():
@@ -347,30 +348,10 @@ def cartpage():
         cursor.close()
         conn.close()
 
+
     return render_template("cart.html", data=rows, grand_total=grand_total, order=order, name=username)
-
-from flask import Flask, request, render_template
-import pymysql
-from datetime import datetime
-from razorpay import Client
-
-# Initialize Flask app
-app = Flask(__name__)
-
-# Razorpay client setup
-client = Client(auth=("your_key_id", "your_key_secret"))
-
-# Database connection credentials
-db = {
-    'host': 'localhost',
-    'user': 'your_user',
-    'password': 'your_password',
-    'database': 'your_database'
-}
-
-@app.route("/success", methods=["POST", "GET"])
+@app.route("/sucess", methods=["POST", "GET"])
 def success():
-    # Retrieve Razorpay parameters
     payment_id = request.form.get("razorpay_payment_id")
     order_id = request.form.get("razorpay_order_id")
     signature = request.form.get("razorpay_signature")
@@ -382,18 +363,14 @@ def success():
     }
 
     try:
-        # Verify Razorpay payment signature
         client.utility.verify_payment_signature(dict1)
         user1 = request.args.get('username')
 
         if user1 is None:
             return "User Not Found"
 
-        # Establish database connection
         conn = pymysql.connect(**db)
         cursor = conn.cursor()
-
-        # Retrieve cart data for the user
         query_cart = f"SELECT * FROM cart_{user1} WHERE username = %s"
         cursor.execute(query_cart, (user1,))
         rows = cursor.fetchall()
@@ -406,25 +383,19 @@ def success():
             total_price = row[4]
             current_datetime = datetime.now()
 
-            # Insert data into order table
             query_order = f"INSERT INTO order_{user1} VALUES (%s, %s, %s, %s, %s, %s)"
             cursor.execute(query_order, (username, fooditem, quantity, price, total_price, current_datetime))
 
-        # Clear user's cart
         query_truncate_cart = f"TRUNCATE TABLE cart_{user1}"
         cursor.execute(query_truncate_cart)
 
-        # Commit changes and close connection
         conn.commit()
         conn.close()
 
     except Exception as e:
-        # Handle any exception
         print(f"Error for user {user1}: {e}")
         return render_template("failure.html", name=user1)
     else:
-        # Render success page on successful completion
         return render_template("success.html", name=user1)
-
-if __name__ == "__main__":
-    app.run(port=5001)
+if __name__=="__main__":
+    app.run(port=5000)
